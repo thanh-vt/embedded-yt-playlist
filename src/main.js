@@ -1,4 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+
+if (!rootId) {
+    var rootId = '#app';
+}
+
+createApp(App).mount(rootId)
