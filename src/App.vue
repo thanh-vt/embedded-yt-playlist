@@ -1,24 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <playlist-main v-if="info" :playlist-id="info.playlistId"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import PlaylistMain from './components/PlaylistMain.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    PlaylistMain
   },
-  mounted() {
-    // eslint-disable-next-line no-undef
-    console.log(eypInfo)
+  created() {
+    // eslint-disable-next-line no-undef,no-prototype-builtins
+    if (!window.hasOwnProperty('eypInfo')) {
+      this.info = {
+        playlistId: 'PLSgEVW8-8rnAz34S07_z_05ynlJftlvZE'
+      }
+    } else {
+      // eslint-disable-next-line no-undef
+      this.info = eypInfo;
+    }
+    console.log(this.info);
+  },
+  data() {
+    return {
+      info: null
+    }
   }
 }
 </script>
 
-<style>
+<style src="./app.css">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

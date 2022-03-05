@@ -31,19 +31,19 @@ if (!class_exists('EmbeddedYtPlaylist')) { // Kiểm tra class đã tồn tại 
             wp_enqueue_style('vue-style');
             wp_enqueue_script('vue-vendors-script');
             wp_enqueue_script('embedded-yt-playlist-vue-script');
-            extract(shortcode_atts(array('playlisturl' => ''), $attrs)); // Bung các biến tùy chọn của short code
+            extract(shortcode_atts(array('playlistid' => ''), $attrs)); // Bung các biến tùy chọn của short code
             wp_localize_script('embedded-yt-playlist-vue-script', 'eypInfo',
                 array(
-                    'playlistUrl' => $playlisturl
+                    'playlistId' => $playlistid
                 )
             );
-            return '</div><div id="app"></div>';
+            return '<div id="app"></div>';
         }
 
         function render_hello($attrs = array(), $content = null): string // Hàm hello_func sử dụng cho short code hello
         {
             extract(shortcode_atts(array('name' => 'World'), $attrs)); // Bung các biến tùy chọn của short code
-            return '<div id="eyp_main"><p>Hello ' . $name . '!!!</p>'; // Giá trị trả về của short code
+            return '<div id="eyp_main"><p>Hello ' . $name . '!!!</p></div>'; // Giá trị trả về của short code
         }
 
         function add_type_attribute($tag, $handle, $src)

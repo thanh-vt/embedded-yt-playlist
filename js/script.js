@@ -1,4 +1,4 @@
-window.addEventListener('load', (event) => {
+window.addEventListener('load', (_) => {
     const mainDiv = document.getElementById('eyp_main');
     if (mainDiv) {
         console.log('Found main div', mainDiv);
@@ -7,5 +7,4 @@ window.addEventListener('load', (event) => {
             mainDiv.style.backgroundColor = 'cyan';
         }, 1500);
     }
-    console.log('page fully loaded', eyp_ajax_object);
 });
