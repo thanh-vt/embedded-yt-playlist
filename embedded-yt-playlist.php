@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: Embedded Youtube Playlist // Tên của plugin
- * Plugin URI: http://hocwp.net // Địa chỉ trang chủ của plugin
- * Description: Đây là plugin đầu tiên mà tôi viết dành riêng cho WordPress, chỉ để học tập mà thôi. // Phần mô tả cho plugin
- * Version: 1.0 // Đây là phiên bản đầu tiên của plugin
- * Author: Sau Hi // Tên tác giả, người thực hiện plugin này
- * Author URI: http://sauhi.com // Địa chỉ trang chủ của tác giả
- * License: GPLv2 or later // Thông tin license của plugin, nếu không quan tâm thì bạn cứ để GPLv2 vào đây
+ * Plugin Name: Embedded Youtube Playlist
+ * Plugin URI: https://github.com/thanh-vt/embedded-yt-playlist
+ * Description: Embed Youtube playlist section into Wordpress page
+ * Version: 1.0
+ * Author: ThanhVt
+ * Author URI: https://github.com/thanh-vt
+ * License: GPLv2 or later
  */
 ?>
 <?php
@@ -21,7 +21,6 @@ if (!class_exists('EmbeddedYtPlaylist')) { // Kiểm tra class đã tồn tại 
             add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts_and_styles'));
 
             add_shortcode('embedded_yt_playlist_app', array(&$this, 'render_app')); // Tạo short code
-            add_shortcode('embedded_yt_playlist_hello', array(&$this, 'render_hello')); // Tạo short code
             add_filter('script_loader_tag', array($this, 'add_type_attribute'), 10, 3);
         }
 
@@ -31,19 +30,14 @@ if (!class_exists('EmbeddedYtPlaylist')) { // Kiểm tra class đã tồn tại 
             wp_enqueue_style('vue-style');
             wp_enqueue_script('vue-vendors-script');
             wp_enqueue_script('embedded-yt-playlist-vue-script');
-            extract(shortcode_atts(array('playlistid' => ''), $attrs)); // Bung các biến tùy chọn của short code
+            extract(shortcode_atts(array('playlistid' => '', 'channelid' => ''), $attrs)); // Bung các biến tùy chọn của short code
             wp_localize_script('embedded-yt-playlist-vue-script', 'eypInfo',
                 array(
-                    'playlistId' => $playlistid
+                    'playlistId' => $playlistid,
+                    'channelId' => $channelid
                 )
             );
-            return '<div id="app"></div>';
-        }
-
-        function render_hello($attrs = array(), $content = null): string // Hàm hello_func sử dụng cho short code hello
-        {
-            extract(shortcode_atts(array('name' => 'World'), $attrs)); // Bung các biến tùy chọn của short code
-            return '<div id="eyp_main"><p>Hello ' . $name . '!!!</p></div>'; // Giá trị trả về của short code
+            return '<script src="https://apis.google.com/js/platform.js"></script><div id="app"></div>';
         }
 
         function add_type_attribute($tag, $handle, $src)
@@ -63,12 +57,7 @@ if (!class_exists('EmbeddedYtPlaylist')) { // Kiểm tra class đã tồn tại 
             wp_register_script('vue-vendors-script', plugins_url('/dist/js/chunk-vendors.js', __FILE__));
             wp_register_script('embedded-yt-playlist-vue-script', plugins_url('/dist/js/app.js', __FILE__), ['vue-vendors-script']);
 
-
-            wp_register_style('embedded-yt-playlist-style', plugins_url('/css/style.css', __FILE__));
-            wp_register_script('embedded-yt-playlist-script', plugins_url('/js/script.js', __FILE__));
-            wp_enqueue_style('embedded-yt-playlist-style');
-            wp_enqueue_script('embedded-yt-playlist-script');
-
+//            wp_enqueue_script('youtube-embedded-script', 'https://apis.google.com/js/platform.js');
         }
 
 
