@@ -31,19 +31,13 @@ export default {
   },
   mounted() {
     console.log('root', document.querySelector('.eyp-m-slides'));
-    this.mSlideObserver = new IntersectionObserver(((entries, observer) => {
-      console.log(entries, observer);
+    this.mSlideObserver = new IntersectionObserver(((entries) => {
+      console.log(entries[entries.length ? entries.length - 1 : null].target);
     }), {
       root: document.querySelector('.eyp-m-slides'),
       rootMargin: '0px',
-      threshold: [1]
+      threshold: [0.9]
     });
-
-    setTimeout(() => {
-      let target = document.getElementById('eyp-m-slide-img1');
-      console.log(target);
-      this.mSlideObserver.observe(target);
-    })
 
     //
     if (localStorage.getItem('newestVideoSeen')) {
@@ -86,6 +80,13 @@ export default {
         btnText: '>'
       }
     ]
+    setTimeout(() => {
+      this.videoItems.forEach(video => {
+        let target = document.getElementById(`eyp-m-slide-${video.id}`);
+        console.log(target);
+        this.mSlideObserver.observe(target);
+      })
+    })
     // this.fetchPlaylist(0);
     // setInterval(() => this.fetchPlaylistItems(0, true), this.pollingInterval)
   },

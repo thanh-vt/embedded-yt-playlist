@@ -51,7 +51,7 @@
 
             <div class="eyp-m-slides" ref="eypMSlides">
                 <template v-for="(video, i) of videoItems">
-                    <div v-if="video.type" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" class="eyp-load-more-container"
+                    <div v-if="video.type" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" class="eyp-m-slide eyp-load-more-container"
                          style="min-height: 270px">
                         <button class="eyp-load-more-btn" @click="fetchPlaylist(video.type)">{{
                                 video.btnText
@@ -59,7 +59,7 @@
                         </button>
                     </div>
 <!--                    <div v-else :key="video.id" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" v-html="video.playerHtml"></div>-->
-                    <div v-else :key="video.id" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" >
+                    <div v-else :key="video.id" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" class="eyp-m-slide">
                         <img width="480" height="270" :src="require(`@/assets/${video.imgSrc}`)" alt="">
                     </div>
                 </template>
