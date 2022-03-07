@@ -1,48 +1,5 @@
-<template>
-  <section class="eyp-wrapper">
-    <div class="eyp-header-container">
-      <div class="eyp-header">
-        <h3>
-          <span v-if="hasSeenNewestVideo" style="color: crimson;">Video:</span>
-          <span v-else style="color: crimson; padding-right: 15px" data-badge="Mới">Video:</span>
-          {{ headerText }}</h3>
-      </div>
-    </div>
-    <div class="eyp-subscription-container">
-      <div class="g-ytsubscribe" :data-channelid="channelId" data-layout="default" data-count="default"></div>
-    </div>
-    <div class="eyp-container">
-      <!--              <iframe width="480" height="270" src="//www.youtube.com/embed/MNeCK0DDtC8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+<template src="./PlaylistMain.html">
 
-      <div class="eyp-slider">
-        <input v-for="(video, i) of videoItems" :key="video.id" class="eyp-slider-target"
-               type="radio" name="slider" :id="`slide-${i + 1}`"
-               :checked="video === selectedVideoItem" @change="selectVideo(video)"/>
-        <div class="eyp-slider__viewport">
-          <div class="eyp-slider__viewbox">
-            <div class="eyp-slider__container">
-              <div v-for="(video, i) of videoItems" :index="i" :key="video.id"
-                   :class="`eyp-slider-item`">
-                <div class="eyp-slider-item__inner">
-                  <div v-if="video.type" class="eyp-load-more-container">
-                    <button class="eyp-load-more-btn" @click="fetchPlaylist(video.type)">{{
-                        video.btnText
-                      }}
-                    </button>
-                  </div>
-<!--                  <img v-else-if="video !== selectedVideoItem" :src="video.thumbnail" alt="" width="100%" height="100%">-->
-                  <div :id="`eyp_vid_${video.id}`" v-else v-html="video.playerHtml"></div>
-
-                  <label :class="`eyp-slider-item__trigger`" :for="`slide-${i + 1}`"
-                         title=""></label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 </template>
 
 <script>
@@ -61,6 +18,15 @@ export default {
     pollingInterval: {
       type: Number,
       default: 300000
+    }
+  },
+  filters: {
+    linkLabel(item, videoItems) {
+      if (item.type) {
+        return item.btnText;
+      } else {
+        return videoItems.filter(e => e.type === 0).indexOf(item) + 1
+      }
     }
   },
   mounted() {
@@ -209,11 +175,22 @@ export default {
         }
       }
       this.selectedVideoItem = image;
+      const index = this.videoItems.indexOf(this.selectedVideoItem);
+
+      // for mobile touch
+      if (index >= 0) {
+        const link = document.getElementById(`eyp-m-slide-${index + 1}`);
+        if (link) {
+          link.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      }
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped src="./playlist.css">
+<style scoped src="./PlaylistMain.css">
 </style>

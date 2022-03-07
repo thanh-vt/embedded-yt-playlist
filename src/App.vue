@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import PlaylistMain from './components/PlaylistMain.vue'
+import PlaylistMain from './components/playlist-main/PlaylistMain.vue'
 
 const DEFAULT_CONFIG = {
   channelId: 'UCae_bZXgQM6ga2_dAo5A-Pg',
@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style src="./app.css">
+<style src="./App.css">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

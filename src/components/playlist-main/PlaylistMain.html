@@ -1,0 +1,65 @@
+<section class="eyp-wrapper">
+    <div class="eyp-header-container">
+        <div class="eyp-header">
+            <h3>
+                <span v-if="hasSeenNewestVideo" style="color: crimson;">Video:</span>
+                <span v-else style="color: crimson; padding-right: 15px" data-badge="Mới">Video:</span>
+                {{ headerText }}</h3>
+        </div>
+    </div>
+    <div class="eyp-subscription-container">
+        <div class="g-ytsubscribe" :data-channelid="channelId" data-layout="default" data-count="default"></div>
+    </div>
+    <div class="eyp-container">
+        <!--              <iframe width="480" height="270" src="//www.youtube.com/embed/MNeCK0DDtC8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+
+        <div class="eyp-slider">
+            <input v-for="(video, i) of videoItems" :key="video.id" class="eyp-slider-target"
+                   type="radio" name="slider" :id="`slide-${i + 1}`"
+                   :checked="video === selectedVideoItem" @change="selectVideo(video)"/>
+            <div class="eyp-slider__viewport">
+                <div class="eyp-slider__viewbox">
+                    <div class="eyp-slider__container">
+                        <div v-for="(video, i) of videoItems" :index="i" :key="video.id"
+                             :class="`eyp-slider-item`">
+                            <div class="eyp-slider-item__inner">
+                                <div v-if="video.type" class="eyp-load-more-container">
+                                    <button class="eyp-load-more-btn" @click="fetchPlaylist(video.type)">{{
+                                            video.btnText
+                                        }}
+                                    </button>
+                                </div>
+                                <!--                  <img v-else-if="video !== selectedVideoItem" :src="video.thumbnail" alt="" width="100%" height="100%">-->
+                                <div :id="`eyp_vid_${video.id}`" v-else v-html="video.playerHtml"></div>
+
+                                <label :class="`eyp-slider-item__trigger`" :for="`slide-${i + 1}`"
+                                       title=""></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="eyp-m-container">
+        <div class="eyp-m-slider">
+
+            <a v-for="(video, i) of videoItems" :key="video.id" :id="`eyp-m-ref-slide-${i + 1}`"
+               :href="`#slide-${i + 1}`">{{ video | linkLabel(videoItems) }}</a>
+
+            <div class="eyp-m-slides">
+                <template v-for="(video, i) of videoItems">
+                    <div v-if="video.type" :id="`slide-${i + 1}`" class="eyp-load-more-container"
+                         style="min-height: 270px">
+                        <button class="eyp-load-more-btn" @click="fetchPlaylist(video.type)">{{
+                                video.btnText
+                            }}
+                        </button>
+                    </div>
+                    <div v-else :key="video.id" :id="`eyp-m-slide-${i + 1}`" v-html="video.playerHtml"></div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+</section>
