@@ -8,10 +8,7 @@ import VideoRepository from "@/VideoRepository";
 
 export default {
   name: 'PlaylistMain',
-  components: {
-    // Carousel3d,
-    // Slide
-  },
+  components: {},
   props: {
     channelId: String,
     playlistId: String,
@@ -30,9 +27,12 @@ export default {
     }
   },
   mounted() {
-    console.log('root', document.querySelector('.eyp-m-slides'));
     this.mSlideObserver = new IntersectionObserver(((entries) => {
-      console.log(entries[entries.length ? entries.length - 1 : null].target);
+      if (entries[0]?.isIntersecting) {
+        const id = entries[0].target.id.replace('eyp-m-slide-', '');
+        const video = this.videoItems.find(e => e.id === id);
+        this.selectVideo(video, true);
+      }
     }), {
       root: document.querySelector('.eyp-m-slides'),
       rootMargin: '0px',
@@ -43,51 +43,8 @@ export default {
     if (localStorage.getItem('newestVideoSeen')) {
       this.newestVideoSeen = JSON.parse(localStorage.getItem('newestVideoSeen'));
     }
-    this.videoItems = [
-      {
-        type: 0,
-        id: 'img1',
-        imgSrc: 'image-1.jpg'
-      },
-      {
-        type: 0,
-        id: 'img2',
-        imgSrc: 'image-2.jpg'
-      },
-      {
-        type: 0,
-        id: 'img3',
-        imgSrc: 'image-3.png'
-      },
-      {
-        type: 0,
-        id: 'img4',
-        imgSrc: 'image-4.jpg'
-      },
-      {
-        type: 0,
-        id: 'img5',
-        imgSrc: 'image-5.jpg',
-      },
-      {
-        type: 0,
-        id: 'img6',
-        imgSrc: 'image-6.jpg'
-      },
-      {
-        type: 1,
-        id: '>',
-        btnText: '>'
-      }
-    ]
-    setTimeout(() => {
-      this.videoItems.forEach(video => {
-        let target = document.getElementById(`eyp-m-slide-${video.id}`);
-        console.log(target);
-        this.mSlideObserver.observe(target);
-      })
-    })
-    // this.fetchPlaylist(0);
+    // this.test();
+    this.fetchPlaylist(0, false);
     // setInterval(() => this.fetchPlaylistItems(0, true), this.pollingInterval)
   },
   data() {
@@ -109,12 +66,58 @@ export default {
     },
   },
   methods: {
-    async fetchPlaylist(type) {
+    test() {
+      this.videoItems = [
+        {
+          type: 0,
+          id: 'img1',
+          imgSrc: 'image-1.jpg'
+        },
+        {
+          type: 0,
+          id: 'img2',
+          imgSrc: 'image-2.jpg'
+        },
+        {
+          type: 0,
+          id: 'img3',
+          imgSrc: 'image-3.png'
+        },
+        {
+          type: 0,
+          id: 'img4',
+          imgSrc: 'image-4.jpg'
+        },
+        {
+          type: 0,
+          id: 'img5',
+          imgSrc: 'image-5.jpg',
+        },
+        {
+          type: 0,
+          id: 'img6',
+          imgSrc: 'image-6.jpg'
+        },
+        {
+          type: 1,
+          id: '>',
+          btnText: '>'
+        }
+      ]
+      this.selectVideo(this.videoItems[0]);
+      setTimeout(() => {
+        this.videoItems.forEach(video => {
+          let target = document.getElementById(`eyp-m-slide-${video.id}`);
+          this.mSlideObserver.observe(target);
+        })
+      })
+    },
+    async fetchPlaylist(type, checkNewestVideoSeen = false) {
       try {
         if (!this.playlistId) {
           return
         }
-        await this.fetchPlaylistItems(type, false);
+        await this.fetchPlaylistItems(type, checkNewestVideoSeen);
       } catch (e) {
         console.error(e);
       }
@@ -134,7 +137,7 @@ export default {
       let prevBtn = []
       let selectedIndex = 0;
       if (this.prevPageToken) {
-        prevBtn = [{type: -1, id: '<', btnText: '<'}, ]
+        prevBtn = [{type: -1, id: '<', btnText: '<'},]
       }
       let nextBtn = []
       if (this.nextPageToken) {
@@ -222,26 +225,30 @@ export default {
       }
       return await VideoRepository.get(searchParams2);
     },
-    selectVideo(video) {
+    selectVideo(video, fromUi = false) {
+      const isMobile = window.getComputedStyle(this.$refs.eypMContainer).display !== 'none';
       // TODO
-      // if (video !== this.selectedVideoItem && this.selectedVideoItem) {
-      //   const first = document.querySelector(`div#eyp_vid_${this.selectedVideoItem.id} iframe`);
-      //   if (first) {
-      //     first.contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
-      //   }
-      // }
+      if (video !== this.selectedVideoItem && this.selectedVideoItem) {
+        const iframeDom = isMobile
+            ? document.querySelector(`div#eyp-m-slide-${this.selectedVideoItem.id} iframe`)
+            : document.querySelector(`div#eyp-slide-${this.selectedVideoItem.id} iframe`);
+        if (iframeDom) {
+          iframeDom.contentWindow.postMessage(
+              '{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+        }
+      }
       this.selectedVideoItem = video;
 
-
-      // for mobile touch
-      if (video.type === 0 && this.$refs.eypMContainer.style.visibility !== 'hidden') {
-        const slideRef = this.$refs[`eypMSlide#${video.id}`];
-        console.log(slideRef);
-        if (slideRef) {
-          slideRef.scrollIntoView({
-            behavior: 'smooth'
-          });
-        }
+      // for mobile swipe
+      if (!fromUi && video.type === 0 && isMobile) {
+        setTimeout(() => {
+          const slideRef = this.$refs[`eypMSlide#${video.id}`][0];
+          if (slideRef) {
+            slideRef.scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+        })
       }
     }
   }
