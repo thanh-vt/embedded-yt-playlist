@@ -30,11 +30,64 @@ export default {
     }
   },
   mounted() {
+    console.log('root', document.querySelector('.eyp-m-slides'));
+    this.mSlideObserver = new IntersectionObserver(((entries, observer) => {
+      console.log(entries, observer);
+    }), {
+      root: document.querySelector('.eyp-m-slides'),
+      rootMargin: '0px',
+      threshold: [1]
+    });
+
+    setTimeout(() => {
+      let target = document.getElementById('eyp-m-slide-img1');
+      console.log(target);
+      this.mSlideObserver.observe(target);
+    })
+
+    //
     if (localStorage.getItem('newestVideoSeen')) {
       this.newestVideoSeen = JSON.parse(localStorage.getItem('newestVideoSeen'));
     }
-    this.fetchPlaylist(0);
-    setInterval(() => this.fetchPlaylistItems(0, true), this.pollingInterval)
+    this.videoItems = [
+      {
+        type: 0,
+        id: 'img1',
+        imgSrc: 'image-1.jpg'
+      },
+      {
+        type: 0,
+        id: 'img2',
+        imgSrc: 'image-2.jpg'
+      },
+      {
+        type: 0,
+        id: 'img3',
+        imgSrc: 'image-3.png'
+      },
+      {
+        type: 0,
+        id: 'img4',
+        imgSrc: 'image-4.jpg'
+      },
+      {
+        type: 0,
+        id: 'img5',
+        imgSrc: 'image-5.jpg',
+      },
+      {
+        type: 0,
+        id: 'img6',
+        imgSrc: 'image-6.jpg'
+      },
+      {
+        type: 1,
+        id: '>',
+        btnText: '>'
+      }
+    ]
+    // this.fetchPlaylist(0);
+    // setInterval(() => this.fetchPlaylistItems(0, true), this.pollingInterval)
   },
   data() {
     return {
@@ -45,7 +98,8 @@ export default {
       nextPageToken: null,
       selectedVideoItem: null,
       newestVideoSeen: null,
-      hasSeenNewestVideo: false
+      hasSeenNewestVideo: false,
+      mSlideObserver: null
     }
   },
   computed: {
@@ -79,11 +133,11 @@ export default {
       let prevBtn = []
       let selectedIndex = 0;
       if (this.prevPageToken) {
-        prevBtn = [{type: -1, btnText: '<'}, ]
+        prevBtn = [{type: -1, id: '<', btnText: '<'}, ]
       }
       let nextBtn = []
       if (this.nextPageToken) {
-        nextBtn = [{type: 1, btnText: '>'}]
+        nextBtn = [{type: 1, id: '>', btnText: '>'}]
       }
       if (type > 0) {
         selectedIndex = 0;
@@ -167,21 +221,23 @@ export default {
       }
       return await VideoRepository.get(searchParams2);
     },
-    selectVideo(image) {
-      if (image !== this.selectedVideoItem && this.selectedVideoItem) {
-        const first = document.querySelector(`div#eyp_vid_${this.selectedVideoItem.id} iframe`);
-        if (first) {
-          first.contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
-        }
-      }
-      this.selectedVideoItem = image;
-      const index = this.videoItems.indexOf(this.selectedVideoItem);
+    selectVideo(video) {
+      // TODO
+      // if (video !== this.selectedVideoItem && this.selectedVideoItem) {
+      //   const first = document.querySelector(`div#eyp_vid_${this.selectedVideoItem.id} iframe`);
+      //   if (first) {
+      //     first.contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+      //   }
+      // }
+      this.selectedVideoItem = video;
+
 
       // for mobile touch
-      if (index >= 0) {
-        const link = document.getElementById(`eyp-m-slide-${index + 1}`);
-        if (link) {
-          link.scrollIntoView({
+      if (video.type === 0 && this.$refs.eypMContainer.style.visibility !== 'hidden') {
+        const slideRef = this.$refs[`eypMSlide#${video.id}`];
+        console.log(slideRef);
+        if (slideRef) {
+          slideRef.scrollIntoView({
             behavior: 'smooth'
           });
         }

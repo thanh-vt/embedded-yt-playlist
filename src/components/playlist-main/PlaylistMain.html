@@ -15,7 +15,7 @@
 
         <div class="eyp-slider">
             <input v-for="(video, i) of videoItems" :key="video.id" class="eyp-slider-target"
-                   type="radio" name="slider" :id="`slide-${i + 1}`"
+                   type="radio" name="slider" :id="`eyp-slide-${video.id}`"
                    :checked="video === selectedVideoItem" @change="selectVideo(video)"/>
             <div class="eyp-slider__viewport">
                 <div class="eyp-slider__viewbox">
@@ -30,8 +30,10 @@
                                     </button>
                                 </div>
                                 <!--                  <img v-else-if="video !== selectedVideoItem" :src="video.thumbnail" alt="" width="100%" height="100%">-->
-                                <div :id="`eyp_vid_${video.id}`" v-else v-html="video.playerHtml"></div>
-
+<!--                                <div v-else :id="`eyp_vid_${video.id}`" v-html="video.playerHtml"></div>-->
+                                <div v-else :id="`eyp_vid_${video.id}`" >
+                                    <img width="480" height="270" :src="require(`@/assets/${video.imgSrc}`)" alt="">
+                                </div>
                                 <label :class="`eyp-slider-item__trigger`" :for="`slide-${i + 1}`"
                                        title=""></label>
                             </div>
@@ -41,22 +43,25 @@
             </div>
         </div>
     </div>
-    <div class="eyp-m-container">
-        <div class="eyp-m-slider">
+    <div class="eyp-m-container" ref="eypMContainer">
+        <div class="eyp-m-slider" ref="eypMSlider">
 
-            <a v-for="(video, i) of videoItems" :key="video.id" :id="`eyp-m-ref-slide-${i + 1}`"
-               :href="`#slide-${i + 1}`">{{ video | linkLabel(videoItems) }}</a>
+            <a v-for="(video, i) of videoItems" :key="video.id" :id="`eyp-m-ref-slide-${video.id}`"
+               href="javascript: void(0)" @click="selectVideo(video)">{{ video | linkLabel(videoItems) }}</a>
 
-            <div class="eyp-m-slides">
+            <div class="eyp-m-slides" ref="eypMSlides">
                 <template v-for="(video, i) of videoItems">
-                    <div v-if="video.type" :id="`slide-${i + 1}`" class="eyp-load-more-container"
+                    <div v-if="video.type" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" class="eyp-load-more-container"
                          style="min-height: 270px">
                         <button class="eyp-load-more-btn" @click="fetchPlaylist(video.type)">{{
                                 video.btnText
                             }}
                         </button>
                     </div>
-                    <div v-else :key="video.id" :id="`eyp-m-slide-${i + 1}`" v-html="video.playerHtml"></div>
+<!--                    <div v-else :key="video.id" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" v-html="video.playerHtml"></div>-->
+                    <div v-else :key="video.id" :id="`eyp-m-slide-${video.id}`" :ref="`eypMSlide#${video.id}`" >
+                        <img width="480" height="270" :src="require(`@/assets/${video.imgSrc}`)" alt="">
+                    </div>
                 </template>
             </div>
         </div>

@@ -371,6 +371,9 @@ input.eyp-slider-target {
 
 .eyp-m-container {
   visibility: hidden;
+  position: relative;
+  width: 0;
+  height: 0;
 }
 
 .eyp-m-slider {
@@ -495,6 +498,8 @@ input.eyp-slider-target {
 
   .eyp-m-container {
     visibility: visible;
+    width: 100%;
+    height: 100%;
   }
 
   .eyp-container {
