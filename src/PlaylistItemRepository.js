@@ -1,6 +1,6 @@
 import Repository from "@/Repository";
 
-const resource = '/playlists'
+const resource = '/playlistItems'
 
 export default {
   get(params) {

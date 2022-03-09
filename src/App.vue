@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <playlist-main v-if="info" :playlist-id="info.playlistId" :channel-id="info.channelId" :polling-interval="info.pollingInterval"/>
+  <div v-if="info">
+    <playlist-main v-if="mode" :playlist-id="info.playlistId" :channel-id="info.channelId" :polling-interval="info.pollingInterval"/>
+    <playlist-secondary v-else :playlist-id="info.playlistId" :channel-id="info.channelId"></playlist-secondary>
   </div>
 </template>
 
 <script>
 import PlaylistMain from './components/playlist-main/PlaylistMain.vue'
+import PlaylistSecondary from "@/components/playlist-secondary/PlaylistSecondary";
 
 const DEFAULT_CONFIG = {
   channelId: 'UCae_bZXgQM6ga2_dAo5A-Pg',
@@ -16,6 +18,7 @@ const DEFAULT_CONFIG = {
 export default {
   name: 'App',
   components: {
+    PlaylistSecondary,
     PlaylistMain
   },
   created() {
@@ -35,6 +38,7 @@ export default {
   },
   data() {
     return {
+      mode: 0,
       info: null
     }
   }

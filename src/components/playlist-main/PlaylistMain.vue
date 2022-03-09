@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PlaylistRepository from "@/PlaylistRepository";
+import PlaylistRepository from "@/PlaylistItemRepository";
 import VideoRepository from "@/VideoRepository";
 
 export default {
@@ -163,7 +163,7 @@ export default {
       searchParams.append('part', 'status');
       searchParams.append('key', 'AIzaSyAq9YUJhA6zruSRQMXM-r_OJ8Yo4wkxH9Y');
       searchParams.append('playlistId', this.playlistId);
-      searchParams.append('maxResults', '6')
+      searchParams.append('maxResults', '5')
       if (type > 0) {
         searchParams.append('pageToken', this.nextPageToken);
       } else if (type < 0) {

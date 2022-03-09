@@ -1,10 +1,13 @@
 <section class="eyp-wrapper">
     <div class="eyp-header-container">
         <div class="eyp-header">
-            <h3>
+            <h3 v-for="(video, i) of videoItems" >
+              <a target="_blank" :href="`https://www.youtube.com/watch?v=${video.id}`">
                 <span v-if="hasSeenNewestVideo" style="color: crimson;">Video:</span>
                 <span v-else style="color: crimson; padding-right: 15px" data-badge="Mới">Video:</span>
-                {{ headerText }}</h3>
+                {{ headerText }}
+              </a>
+            </h3>
         </div>
     </div>
     <div class="eyp-subscription-container">
