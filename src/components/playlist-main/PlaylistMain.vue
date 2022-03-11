@@ -124,7 +124,9 @@ export default {
     },
     convertDataAndSelectDefault(type, videoItems) {
       const videos = videoItems.data.items.map(e => {
-        const src = e.player.embedHtml.match(/(?<=src=").*?(?=[\\*"])/g);
+        // const src = e.player.embedHtml.match(/(?<=src=").*?(?=[\\*"])/g);
+        // const srcJs = `${src}?enablejsapi=1`;
+        const src = e.player.embedHtml.match(/src="[^(\s|")]+/g);
         const srcJs = `${src}?enablejsapi=1`;
         return {
           id: e.id,

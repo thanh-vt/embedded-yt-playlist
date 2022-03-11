@@ -5,6 +5,7 @@
 import PlaylistRepository from "@/PlaylistRepository";
 import PlaylistItemRepository from '@/PlaylistItemRepository'
 
+
 export default {
   name: "PlaylistSecondary",
   props: {
@@ -39,10 +40,16 @@ export default {
       const playlistDetail = await PlaylistRepository.get(searchParams);
       if (playlistDetail.data.items.length) {
         this.playerSrc = playlistDetail.data.items[0].player.embedHtml;
-        const height = this.playerSrc.match(/(?<=height=").*?(?=[\\*"])/g);
-        this.playerSrc = this.playerSrc.replace(height, "90%");
-        const width = this.playerSrc.match(/(?<=width=").*?(?=[\\*"])/g);
-        this.playerSrc = this.playerSrc.replace(width, "93%");
+        // const height = this.playerSrc.match(/(?<=height=").*?(?=[\\*"])/g);
+        // this.playerSrc = this.playerSrc.replace(height, "90%");
+        // const width = this.playerSrc.match(/(?<=width=").*?(?=[\\*"])/g);
+        // this.playerSrc = this.playerSrc.replace(width, "93%");
+        console.log(this.playerSrc);
+        const height = this.playerSrc.match(/(height="\d+")/g);
+        this.playerSrc = this.playerSrc.replace(height, "height=\"90%\"");
+        const width = this.playerSrc.match(/width="\d+"/g);
+        this.playerSrc = this.playerSrc.replace(width, "width=\"93%\"");
+        this.playerSrc = this.playerSrc.replace('http:', "https:");
         return playlistDetail.data.items[0].id;
       } else return null;
     },
