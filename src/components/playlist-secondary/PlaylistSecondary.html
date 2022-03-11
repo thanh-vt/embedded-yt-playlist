@@ -1,17 +1,18 @@
 <div>
-  <section class="eyp-wrapper">
-    <div class="eyp-header-container">
-      <div class="eyp-header" >
-        <h3 v-for="(video, i) of videoItems" >
-          <a target="_blank" :href="`https://www.youtube.com/watch?v=${video.id}`">
-            {{ video.title }}
-          </a>
-        </h3>
-      </div>
-    </div>
-    <div class="eyp-subscription-container">
-      <div class="g-ytsubscribe" :data-channelid="channelId" data-layout="default" data-count="default"></div>
-    </div>
-    <div v-if="playerSrc" v-html="playerSrc" class="eyp-container"></div>
-  </section>
+    <section class="eyp-wrapper">
+        <div class="eyp-header-container">
+            <div class="eyp-header">
+                <h4 v-for="(video, i) of videoItems">
+                    <span style="color: red; font-weight: bolder">Video:&nbsp;</span>
+                    <a target="_blank" :href="`https://www.youtube.com/watch?v=${video.id}`">
+                        {{ video.title }}
+                    </a>
+                </h4>
+            </div>
+        </div>
+        <div class="eyp-subscription-container">
+            <div class="g-ytsubscribe" :data-channelid="channelId" data-layout="default" data-count="default"></div>
+        </div>
+        <div v-if="playerSrc" v-html="playerSrc" class="eyp-container"></div>
+    </section>
 </div>

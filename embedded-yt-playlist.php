@@ -3,7 +3,7 @@
  * Plugin Name: Embedded Youtube Playlist
  * Plugin URI: https://github.com/thanh-vt/embedded-yt-playlist
  * Description: Embed Youtube playlist section into Wordpress page
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: ThanhVt
  * Author URI: https://github.com/thanh-vt
  * License: GPLv2 or later
